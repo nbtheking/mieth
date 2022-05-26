@@ -8,6 +8,7 @@ import {
   ScrollView,
   ActivityIndicator,
   SafeAreaView,
+  StatusBar,
 } from "react-native";
 
 export default function App() {
@@ -49,6 +50,7 @@ export default function App() {
           ))
         )}
       </ScrollView>
+      <StatusBar />
     </SafeAreaView>
   );
 }
@@ -65,9 +67,9 @@ const styles = StyleSheet.create({
   header: {
     fontWeight: "bold",
     fontSize: 20,
-    marginTop: 15,
+    paddingTop: 10,
     padding: 30,
-    paddingBottom: 5,
+    paddingBottom: 10,
     textAlign: "center",
   },
 });
