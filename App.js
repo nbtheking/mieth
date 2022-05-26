@@ -1,21 +1,69 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Movie from "./component/Movie";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 
 export default function App() {
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getMovies = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.themoviedb.org/3/discover/movie?api_key=acea91d2bff1c53e6604e4985b6989e2&page=1"
+      );
+      const data = await response.data.results;
+      console.log(data);
+      setMovies(data);
+      setIsLoading(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getMovies();
+  }, []);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+      <Text style={styles.header}>Movie List</Text>
+      <ScrollView>
+        {isLoading ? (
+          movies.map((movie) => (
+            <View style={styles.container} key={movie.id}>
+              <Movie
+                title={movie.title}
+                overview={movie.overview}
+                poster={movie.poster_path}
+                date={movie.release_date}
+              />
+            </View>
+          ))
+        ) : (
+          <ActivityIndicator size="large" />
+        )}
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "E6E1E1",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  header: {
+    fontWeight: "bold",
+    fontSize: 20,
+    marginTop: 15,
+    padding: 30,
+    paddingBottom: 5,
+    textAlign: "center",
   },
 });
