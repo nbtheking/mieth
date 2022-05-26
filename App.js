@@ -7,11 +7,12 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getMovies = async () => {
     try {
@@ -21,7 +22,7 @@ export default function App() {
       const data = await response.data.results;
       console.log(data);
       setMovies(data);
-      setIsLoading(true);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -30,10 +31,12 @@ export default function App() {
     getMovies();
   }, []);
   return (
-    <View>
+    <SafeAreaView style={styles.wrapper}>
       <Text style={styles.header}>Movie List</Text>
       <ScrollView>
         {isLoading ? (
+          <ActivityIndicator size="large" />
+        ) : (
           movies.map((movie) => (
             <View style={styles.container} key={movie.id}>
               <Movie
@@ -44,17 +47,18 @@ export default function App() {
               />
             </View>
           ))
-        ) : (
-          <ActivityIndicator size="large" />
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: "#E6E1E1",
+    margin: 10,
+  },
   container: {
-    backgroundColor: "E6E1E1",
     alignItems: "center",
     justifyContent: "center",
   },

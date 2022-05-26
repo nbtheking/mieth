@@ -8,7 +8,7 @@ const Movie = ({ title, overview, poster, date }) => {
       <Text style={styles.overview}>{overview}</Text>
       <Image
         source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster }}
-        alt=""
+        alt={title}
         style={{ height: 200, width: 350 }}
       />
       <Text style={styles.date}> Release Date:{date}</Text>
@@ -20,12 +20,7 @@ export default Movie;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    padding: 5,
-  },
-  img: {
-    width: 300,
-    height: 200,
+    padding: 10,
   },
   title: {
     padding: 5,
@@ -36,6 +31,7 @@ const styles = StyleSheet.create({
   overview: {
     padding: 5,
     backgroundColor: "white",
+    textAlign: "justify",
   },
   date: {
     padding: 5,
