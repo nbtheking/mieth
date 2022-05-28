@@ -5,51 +5,66 @@ import {
   Text,
   View,
   StyleSheet,
-  ScrollView,
   ActivityIndicator,
   SafeAreaView,
   StatusBar,
+  FlatList,
 } from "react-native";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pageCount, setPageCount] = useState(1);
 
   const getMovies = async () => {
     try {
       const response = await axios.get(
-        "https://api.themoviedb.org/3/discover/movie?api_key=acea91d2bff1c53e6604e4985b6989e2&page=1"
+        "https://api.themoviedb.org/3/discover/movie?api_key=acea91d2bff1c53e6604e4985b6989e2&page=" +
+          pageCount
       );
-      const data = await response.data.results;
-      console.log(data);
-      setMovies(data);
+      const items = await response.data.results;
+      console.log(items);
+      setMovies(movies.concat(items));
       setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
+  const renderFooter = () => {
+    return isLoading ? (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" />
+      </View>
+    ) : null;
+  };
   useEffect(() => {
+    setIsLoading(true);
     getMovies();
   }, []);
+  const handleLoadMore = () => {
+    setPageCount(pageCount + 1);
+    setIsLoading(true);
+  };
   return (
     <SafeAreaView style={styles.wrapper}>
       <Text style={styles.header}>Movie List</Text>
-      <ScrollView>
-        {isLoading ? (
-          <ActivityIndicator size="large" />
-        ) : (
-          movies.map((movie) => (
-            <View style={styles.container} key={movie.id}>
-              <Movie
-                title={movie.title}
-                overview={movie.overview}
-                poster={movie.poster_path}
-                date={movie.release_date}
-              />
-            </View>
-          ))
-        )}
-      </ScrollView>
+      <View style={styles.container}>
+        <FlatList
+          keyExtractor={(item) => item.id}
+          data={movies}
+          renderItem={({item}) => (
+            <Movie
+              title={item.title}
+              overview={item.overview}
+              poster={item.poster_path}
+              date={item.release_date}
+            />
+          )}
+          ListFooterComponent={renderFooter}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0}
+        />
+      </View>
       <StatusBar />
     </SafeAreaView>
   );
@@ -71,5 +86,9 @@ const styles = StyleSheet.create({
     padding: 30,
     paddingBottom: 10,
     textAlign: "center",
+  },
+  loader: {
+    marginTop: 10,
+    alignItems: "center",
   },
 });

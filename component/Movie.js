@@ -9,7 +9,7 @@ const Movie = ({ title, overview, poster, date }) => {
       <Image
         source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster }}
         alt={title}
-        style={{ height: 200, width: 350 }}
+        style={{ height: 200, width: "100%", resizeMode: "cover" }}
       />
       <Text style={styles.date}> Release Date:{date}</Text>
     </View>
