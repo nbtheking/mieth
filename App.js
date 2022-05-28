@@ -40,7 +40,7 @@ export default function App() {
   useEffect(() => {
     setIsLoading(true);
     getMovies();
-  }, []);
+  }, [pageCount]);
   const handleLoadMore = () => {
     setPageCount(pageCount + 1);
     setIsLoading(true);
@@ -52,7 +52,7 @@ export default function App() {
         <FlatList
           keyExtractor={(item) => item.id}
           data={movies}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <Movie
               title={item.title}
               overview={item.overview}
