@@ -89,5 +89,6 @@ const styles = StyleSheet.create({
   loader: {
     marginTop: 10,
     alignItems: "center",
+    marginBottom: 100,
   },
 });
