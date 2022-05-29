@@ -24,27 +24,31 @@ export default function App() {
       );
       const items = await response.data.results;
       console.log(items);
-      setMovies(movies.concat(items));
+      setMovies([...movies, ...items]);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
+
   const renderFooter = () => {
     return isLoading ? (
       <View style={styles.loader}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#aaa" />
       </View>
     ) : null;
   };
+
   useEffect(() => {
     setIsLoading(true);
     getMovies();
   }, [pageCount]);
+
   const handleLoadMore = () => {
     setPageCount(pageCount + 1);
     setIsLoading(true);
   };
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <Text style={styles.header}>Movie List</Text>
@@ -62,6 +66,7 @@ export default function App() {
           )}
           ListFooterComponent={renderFooter}
           onEndReached={handleLoadMore}
+          onEndReachedThreshold={0}
         />
       </View>
       <StatusBar />
