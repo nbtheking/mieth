@@ -66,7 +66,7 @@ export default function App() {
           )}
           ListFooterComponent={renderFooter}
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0}
+          onEndReachedThreshold={0.5}
         />
       </View>
       <StatusBar />
